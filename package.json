@@ -1,0 +1,22 @@
+{
+  "name": "ordenes-de-compra",
+  "version": "1.0.0",
+  "description": "Administra ordenes de compra donde cada interesado paga por lo que consume.",
+  "main": "app.js",
+  "scripts": {
+    "start": "npm run dev",
+    "tsc": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly ./app/app.service.ts",
+    "prod": "tsc && node ./build/app.js"
+  },
+  "author": "Julián Fernández Reyes",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2"
+  }
+}
