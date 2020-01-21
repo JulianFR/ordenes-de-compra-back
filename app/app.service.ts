@@ -5,7 +5,6 @@ import { manejarErroresMiddleware } from './middleware/manejar-errores.middlewar
 import { requerirJsonMiddleware } from './middleware/requerir-json.middleware';
 import { OrdenDeCompraController } from './orden/orden.controller';
 import { OrdenDeCompra } from './orden/orden.model';
-import productosMock from './producto/producto.mock';
 import { Producto } from './producto/producto.model';
 import { Usuario } from './usuario/usuario.model';
 
@@ -18,7 +17,7 @@ const configurarRutas = () => (
     .Router()
     .get("/usuarios", (request: Request, response: Response) => response.json(Usuario.usuarios))
     .get("/productos", (request: Request, response: Response) => response.json(Producto.productos))
-    .get("/productos-mock", (request: Request, response: Response) => response.json(productosMock))
+    .get("/productos/:producto", (request: Request, response: Response) => response.json(request.params.producto.split(", ").map(id => Producto.obtener(+id))))
     .post("/usuarios", (request: Request, response: Response) => response.send(Usuario.agregar(request.body.nombre, request.body.contraseña)))
     .post("/productos", (request: Request, response: Response) => response.send(Producto.agregar(request.body.nombre, request.body.precio)))
     .post("/pedidos", (request: Request, response: Response) => response.send(crearPedido(request.body.orden, request.body.producto, request.body.usuario, request.body.cantidad)))
