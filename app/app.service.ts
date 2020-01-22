@@ -8,8 +8,11 @@ import { OrdenDeCompra } from './orden/orden.model';
 import { Producto } from './producto/producto.model';
 import { Usuario } from './usuario/usuario.model';
 
-function crearPedido(orden: number, producto: number, usuario: number, cantidad?: number) {
-  OrdenDeCompra.obtener(orden).agregarPedidoAlProductoPorIndice(producto, Usuario.obtener(usuario).id, cantidad);
+function crearPedido(usuario: number, orden: number, pedidos: { producto: number, cantidad?: number }[] = []) {
+  const ordenDeCompra = OrdenDeCompra.obtener(orden);
+  pedidos.forEach(p => {
+    ordenDeCompra.agregarPedidoAlProductoPorId(Usuario.obtener(usuario).id, p.producto, p.cantidad);
+  })
 }
 
 const configurarRutas = () => (
@@ -20,7 +23,7 @@ const configurarRutas = () => (
     .get("/productos/:producto", (request: Request, response: Response) => response.json(request.params.producto.split(", ").map(id => Producto.obtener(+id))))
     .post("/usuarios", (request: Request, response: Response) => response.send(Usuario.agregar(request.body.nombre, request.body.contraseña)))
     .post("/productos", (request: Request, response: Response) => response.send(Producto.agregar(request.body.nombre, request.body.precio)))
-    .post("/pedidos", (request: Request, response: Response) => response.send(crearPedido(request.body.orden, request.body.producto, request.body.usuario, request.body.cantidad)))
+    .post("/pedidos", (request: Request, response: Response) => response.send(crearPedido(request.body.usuario, request.body.orden, request.body.pedidos)))
     .post("/ingresos", requerirJsonMiddleware, (request: Request, response: Response) => {
       const nombre = request.body.nombre;
       const contraseña = request.body.contraseña;
@@ -30,7 +33,7 @@ const configurarRutas = () => (
       if (!usuario) { throw { estado: 404, mensaje: "Usuario no encontrado" }; }
       if (usuario.contraseña !== contraseña) { throw { estado: 400, mensaje: "Contraseña incorrecta" }; }
 
-      response.sendStatus(200);
+      response.json({ id: usuario.id, nombre: usuario.id });
     })
 );
 

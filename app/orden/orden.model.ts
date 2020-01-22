@@ -45,6 +45,10 @@ export class OrdenDeCompra {
     this.obtenerProductoPorIndice(productoIndice).agregarPedido(usuario, cantidad);
   }
 
+  agregarPedidoAlProductoPorId(usuario: number, id: number, cantidad: number = 1) {
+    this.obtenerProductoPorId(id).agregarPedido(usuario, cantidad);
+  }
+
   quitarProductoPorId(producto: number) {
     this.obtenerProductoPorId(producto).quitar();
   }
